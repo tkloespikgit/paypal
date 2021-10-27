@@ -12,7 +12,7 @@
     <input type="hidden" name="cmd" value="_xclick">
     <input type="hidden" name="business" value="{{$accounts->account_email}}">
     <input type="hidden" name="item_name" value="{{$request->item_name}}">
-    <input type="hidden" name="item_number" value="{{$request->item_number}}">
+    <input type="hidden" name="quantity" value="{{$request->quantity}}">
     <input type="hidden" name="amount" value="{{$request->amount}}">
     <input type="hidden" name="shipping" value="{{$request->shipping}}">
     <input type="hidden" name="no_shipping" value="1">

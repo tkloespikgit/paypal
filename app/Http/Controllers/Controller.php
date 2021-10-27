@@ -29,7 +29,7 @@ class Controller extends BaseController
 
     public function payNow(Request $request)
     {
-        if (!$request->has(['item_name','item_number','amount','shipping','invoice'])){
+        if (!$request->has(['item_name','quantity','amount','shipping','invoice'])){
             return 'error happened!';
         }
         $accounts = $this->getAccounts();
