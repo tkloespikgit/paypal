@@ -8,7 +8,7 @@
     <title>Payment</title>
 </head>
 <body>
-<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" id="payForm">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="payForm">
     <input type="hidden" name="charset" value="utf-8">
     <input name="upload" value="1" type="hidden">
     <input type="hidden" name="cmd" value="_cart">
