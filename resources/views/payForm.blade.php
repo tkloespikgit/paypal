@@ -26,7 +26,7 @@
     {{--运费以及折扣--}}
     <input type="hidden" name="shipping" value="0">
     <input type="hidden" name="discount_amount_cart" value="{{$order->discount_amount}}"/>
-    <input type="hidden" name="notify_url" value="{{url('ReceiveNotify')}}">
+    <input type="hidden" name="notify_url" value="{{url('receiveNotify')}}">
     {{--订单号--}}
     <input type="hidden" name="invoice" value="{{$order->order_number}}">
     <input type="hidden" name="no_note" value="1">
