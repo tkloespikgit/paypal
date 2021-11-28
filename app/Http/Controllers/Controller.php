@@ -56,18 +56,18 @@ class Controller extends BaseController
 
     public function showAccountsV2(Request $request)
     {
-        if ($request->has('camount'))
-        {
+        if ($request->isMethod('post')) {
+            $accounts = $this->getAccounts();
             $data = $this->initProduct($request->input('camount'));
             $order = OrderInfo::query()->create([
-                'order_number' => time() . '-' . rand(10000,99999),
+                'order_number' => time() . '-' . rand(10000, 99999),
+                'receiver_email' => $accounts->account_email,
                 'email' => $request->input('cemail'),
                 'name' => $request->input('cname'),
                 'total_amount' => $request->input('camount'),
                 'discount_amount' => $data['discount']
             ]);
-            foreach ($data['pArr'] as $key => $val)
-            {
+            foreach ($data['pArr'] as $key => $val) {
                 OrderToProduct::query()->create([
                     'order_id' => $order->id,
                     'product_id' => $key,
@@ -75,8 +75,7 @@ class Controller extends BaseController
                 ]);
             }
             $orderArr = $this->getOrderProds($order->id);
-            $accounts = $this->getAccounts();
-            return view('payForm',compact('order','orderArr','accounts'));
+            return view('payForm', compact('order', 'orderArr', 'accounts'));
         }
         return view('input_amount');
     }
@@ -86,11 +85,11 @@ class Controller extends BaseController
         /*获取最小单价*/
         $this->minPrice = Product::query()->orderBy('price')->min('price');
         /*获取小于总金额的所有产品*/
-        $products = Product::query()->where('price','<=',$amount)->get();
+        $products = Product::query()->where('price', '<=', $amount)->get();
 
         $pArr = [];
         $i = 0;
-        while ($i<300) {
+        while ($i < 300) {
             $i++;
 
             $product = $products->where('price', '<=', $amount)->random();
@@ -102,7 +101,7 @@ class Controller extends BaseController
             }
         }
 
-        $minProd = $products ->where('price','=',$this->minPrice)->random();
+        $minProd = $products->where('price', '=', $this->minPrice)->random();
         $pArr[$minProd->id][] = $minProd->id;
         return [
             'discount' => $this->minPrice - $amount,
@@ -113,17 +112,16 @@ class Controller extends BaseController
     public function getOrderProds($orderId)
     {
         return OrderToProduct::query()
-            ->where('order_id',$orderId)
+            ->where('order_id', $orderId)
             ->with('Products')
             ->get();
     }
 
-    public function receiveNotify(Request  $request)
+    public function receiveNotify(Request $request)
     {
-        if ($request->input('payment_status') == 'Completed')
-        {
+        if ($request->input('payment_status') == 'Completed') {
             OrderInfo::query()
-                ->where('order_number',$request->input('invoice'))
+                ->where('order_number', $request->input('invoice'))
                 ->update([
                     'status' => 1,
                     'porder_no' => $request->input('txn_id')

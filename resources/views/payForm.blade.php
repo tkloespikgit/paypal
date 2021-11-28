@@ -13,7 +13,7 @@
     <input name="upload" value="1" type="hidden">
     <input type="hidden" name="cmd" value="_cart">
     {{--账号--}}
-    <input type="hidden" name="business" value="sb-1rvcy8752494@business.example.com">
+    <input type="hidden" name="business" value="{{$accounts->account_email}}">
     {{--币种--}}
     <input type="hidden" name="currency_code" value="USD">
     {{--物品--}}

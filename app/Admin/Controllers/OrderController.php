@@ -27,9 +27,10 @@ class OrderController extends AdminController
         $grid = new Grid(new OrderInfo());
 
         $grid->column('id', __('Id'));
-        $grid->column('order_number', '系统单号')->searchable();
-        $grid->column('porder_no', 'PayPal 订单号')->searchable();
-        $grid->column('email', '客户邮箱')->searchable();
+        $grid->column('order_number', '系统单号')->filter('like');
+        $grid->column('porder_no', 'PayPal 订单号')->filter('like');
+        $grid->column('email', '客户邮箱')->filter('like');
+        $grid->column('receiver_email', '收款人邮箱')->filter('like')->searchable();
         $grid->column('name', '客户名字');
         $grid->column('total_amount', '交易金额');
         $grid->column('discount_amount', '显示折扣');
@@ -39,7 +40,10 @@ class OrderController extends AdminController
             } else {
                 return '已完成';
             }
-        })->searchable();
+        })->filter([
+            0 => '未完成',
+            1 => '已完成'
+        ]);
         $grid->column('express', '快递公司');
         $grid->column('express_no', '快递单号');
         $grid->column('created_at', '创建时间');
@@ -62,6 +66,7 @@ class OrderController extends AdminController
         $show->field('order_number', '系统单号');
         $show->field('porder_no', 'Paypal 单号');
         $show->field('email', '客户邮箱');
+        $show->field('receiver_email', '收款人邮箱');
         $show->field('name', '客户名字');
         $show->field('total_amount', '总金额');
         $show->field('discount_amount', '显示折扣');
@@ -86,6 +91,7 @@ class OrderController extends AdminController
         $form->text('order_number', '系统单号')->disable();
         $form->text('porder_no', '系统单号')->disable();
         $form->email('email', '客户邮箱')->disable();
+        $form->email('receiver_email', '收款人邮箱')->disable();
         $form->text('name', '客户名字')->disable();
         $form->decimal('total_amount', '总金额')->disable();
         $form->decimal('discount_amount', '显示折扣')->disable();
