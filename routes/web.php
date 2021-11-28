@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::any('/',[\App\Http\Controllers\Controller::class,'showAccounts']);
 Route::any('showAccountsV2',[\App\Http\Controllers\Controller::class,'showAccountsV2']);
 Route::any('make-payment',[\App\Http\Controllers\Controller::class,'payNow']);
+Route::any('receiveNotify',[\App\Http\Controllers\Controller::class,'ReceiveNotify']);
