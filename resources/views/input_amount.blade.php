@@ -23,7 +23,7 @@
                 <h4>Please complete transaction info:</h4>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" >
+                <form class="form-horizontal" method="post">
                     {{csrf_field()}}
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">Your email</label>
