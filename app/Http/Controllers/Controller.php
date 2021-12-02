@@ -132,19 +132,17 @@ class Controller extends BaseController
 
     public function ShowLic(Request $request)
     {
-        if ($request->isMethod('get'))
-        {
-            return view('inputOrderNos');
-        }
-        else
-        {
-            $orderNos = explode(',',$request->input('orderNos'));
+        $orderStr = '';
+        $orders = null;
+        if ($request->isMethod('post')) {
+            $orderStr = explode(',', $request->input('orderNos'));
             $orders = OrderInfo::query()
-                ->whereIn('porder_no',$orderNos)
+                ->whereIn('porder_no', $orderStr)
                 ->with('rProducts')
+                ->with('rProducts.Products')
                 ->get();
-            dd($orders);
         }
+        return view('inputOrderNos',compact('orders','orderStr'));
     }
 
 }

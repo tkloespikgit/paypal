@@ -11,15 +11,8 @@ class OrderInfo extends Model
 
     protected $guarded = [];
 
-    public function rProducts()
+    public function rProducts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasManyThrough(
-            Product::class,
-            OrderToProduct::class,
-            'order_id',
-            'product_id',
-            'id',
-            'id'
-        );
+        return $this->hasMany(OrderToProduct::class,'order_id');
     }
 }
