@@ -75,6 +75,8 @@ class Controller extends BaseController
                 ]);
             }
             $orderArr = $this->getOrderProds($order->id);
+            $accounts->last_resp = time();
+            $accounts->save();
             return view('payForm', compact('order', 'orderArr', 'accounts'));
         }
         return view('input_amount');
