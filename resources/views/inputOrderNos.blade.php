@@ -71,14 +71,14 @@
                                 @foreach($order->rProducts as $product)
                                     <span>
                                         {{$product->products->name}}
-                                        (销售数量:{{$product->unit}},单价:{{number_format($product->products->price,2)}}美金,
-                                        总价:{{number_format($product->unit*$product->products->price,2)}}美金)</span>;<br/>
+                                        (数量:{{$product->unit}},单价:${{number_format($product->products->price,2)}},
+                                        总价:${{number_format($product->unit*$product->products->price,2)}})</span>;<br/>
                                 @endforeach
-                                合计{{number_format($order->total_amount + $order->discount_amount,2)}}美金，<br/>
-                                优惠折扣{{number_format($order->discount_amount,2)}}美金，<br/>
-                                总付款金额：{{number_format($order->total_amount,2)}}美金，<br/>
-                                物品通过{{$order->express??'未知'}}(快递单号:{{$order->express_no??'未知'}})发货，<br/>
-                                我们的销售网址是：<b>https://www.besttrinkets.com</b>
+                                合计 ${{number_format($order->total_amount + $order->discount_amount,2)}},<br/>
+                                优惠折扣 ${{number_format($order->discount_amount,2)}},<br/>
+                                总付款金额 ${{number_format($order->total_amount,2)}},<br/>
+                                物品通过 {{$order->express??'未知'}}(单号:{{$order->express_no??'未知'}})发货，<br/>
+                                销售网址 <b>besttrinkets.com</b>
                             </p>
                         </div>
                     </div>
