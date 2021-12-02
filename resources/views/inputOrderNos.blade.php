@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">请输入订单号：</label>
                         <div class="col-sm-10">
-                            <textarea id="inputEmail3" name="orderNos" placeholder="请以英文逗号分割">{{implode($orderStr,',')}}</textarea>
+                            <textarea id="inputEmail3" class="form-control" rows="8" name="orderNos" placeholder="请以英文逗号分割">{{implode($orderStr,',')}}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -62,24 +62,24 @@
                         </tr>
                     </table>
                     <div class="media">
-                        <div class="media-left media-top">
-                            <a href="#">
-                                交易活动信息：
-                            </a>
-                        </div>
                         <div class="media-body">
+                            <h4>交易活动信息：</h4>
                             <p>
-                                该笔订单(系统订单号:{{$order->order_number}}),顾客 {{$order->name}}
-                                购买物品有：
-                                @foreach($order->r_products as $product)
-                                    <span>{{$product->products->name}}(销售数量:{{$product->unit}},单价:{{$product->products->price}}美金,总价:{{$product->unit*$product->products->price}}美金)</span>、
+                                该笔订单(单号:{{$order->order_number}}),顾客{{$order->name}}
+                                购买物品有:
+                                <br/>
+                                @foreach($order->rProducts as $product)
+                                    <span>
+                                        {{$product->products->name}}
+                                        (销售数量:{{$product->unit}},单价:{{number_format($product->products->price,2)}}美金,
+                                        总价:{{number_format($product->unit*$product->products->price,2)}}美金)</span>;<br/>
                                 @endforeach
-                                合计 {{$order->total_amount + $order->discount_amount}} 美金，
-                                优惠折扣{{$order->discount_amount}}美金，总付款金额：{{$order->total_amount}}美金，
-                                物品通过{{$order->express??'未知'}}(快递单号:{{$order->express_no??'未知'}})发货，
-                                我们的销售网址是：https://www.besttrinkets.com/
+                                合计{{number_format($order->total_amount + $order->discount_amount,2)}}美金，<br/>
+                                优惠折扣{{number_format($order->discount_amount,2)}}美金，<br/>
+                                总付款金额：{{number_format($order->total_amount,2)}}美金，<br/>
+                                物品通过{{$order->express??'未知'}}(快递单号:{{$order->express_no??'未知'}})发货，<br/>
+                                我们的销售网址是：<b>https://www.besttrinkets.com</b>
                             </p>
-
                         </div>
                     </div>
                 </div>
