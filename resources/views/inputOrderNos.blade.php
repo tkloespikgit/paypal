@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">请输入订单号：</label>
                         <div class="col-sm-10">
-                            <textarea id="inputEmail3" name="orderNos" placeholder="请以英文逗号分割">{{$orderStr}}</textarea>
+                            <textarea id="inputEmail3" name="orderNos" placeholder="请以英文逗号分割">{{implode($orderStr,',')}}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
