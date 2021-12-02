@@ -39,7 +39,7 @@ class PaypalAccountController extends AdminController
             }
         });
         $grid->column('last_resp', '最近使用时间')->display(function ($last_resp){
-            return date('Y/m/d H:i:s');
+            return date('Y/m/d H:i:s',$last_resp);
         })->sortable();
         $grid->column('balance', '余额');
         $grid->column('currency', '币种');

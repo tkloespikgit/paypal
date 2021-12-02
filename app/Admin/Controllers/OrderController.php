@@ -89,7 +89,7 @@ class OrderController extends AdminController
         $form = new Form(new OrderInfo());
 
         $form->text('order_number', '系统单号')->disable();
-        $form->text('porder_no', '系统单号')->disable();
+        $form->text('porder_no', 'Paypal 订单号')->disable();
         $form->email('email', '客户邮箱')->disable();
         $form->email('receiver_email', '收款人邮箱')->disable();
         $form->text('name', '客户名字')->disable();
