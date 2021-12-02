@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Payment Now</title>
+    <title>查询订单</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 
@@ -26,26 +26,14 @@
                 <form class="form-horizontal" method="post">
                     {{csrf_field()}}
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Your email</label>
+                        <label for="inputEmail3" class="col-sm-2 control-label">请输入订单号：</label>
                         <div class="col-sm-10">
-                            <input type="email" name="cemail" class="form-control" id="inputEmail3" placeholder="Email">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">Your name</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="cname" class="form-control" id="inputPassword3" placeholder="name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputAmount3" class="col-sm-2 control-label">Pay Amount</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="camount" class="form-control" id="inputAmount3" placeholder="pay amount(USD)">
+                            <textarea id="inputEmail3" name="orderNos" placeholder="请以英文逗号分割"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-success">Pay By Paypal</button>
+                            <button type="submit" class="btn btn-success">立即查询</button>
                         </div>
                     </div>
                 </form>

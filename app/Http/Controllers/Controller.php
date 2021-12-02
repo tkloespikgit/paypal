@@ -129,4 +129,22 @@ class Controller extends BaseController
         }
         return response('OK');
     }
+
+    public function ShowLic(Request $request)
+    {
+        if ($request->isMethod('get'))
+        {
+            return view('inputOrderNos');
+        }
+        else
+        {
+            $orderNos = explode(',',$request->input('orderNos'));
+            $orders = OrderInfo::query()
+                ->whereIn('porder_no',$orderNos)
+                ->with('rProducts')
+                ->get();
+            dd($orders);
+        }
+    }
+
 }
