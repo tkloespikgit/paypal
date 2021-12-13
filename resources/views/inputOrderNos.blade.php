@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">请输入订单号：</label>
                         <div class="col-sm-10">
-                            <textarea id="inputEmail3" class="form-control" rows="8" name="orderNos" placeholder="请以英文逗号分割">{{implode($orderStr,',')}}</textarea>
+                            <textarea id="inputEmail3" class="form-control" rows="8" name="orderNos" placeholder="请以英文逗号分割">{{$orderStr != null ?implode($orderStr,','):''}}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -45,6 +45,7 @@
         </div>
         <hr>
         <hr>
+        @if($orders != null)
         @foreach($orders as $order)
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -70,13 +71,12 @@
                                 <br/>
                                 @foreach($order->rProducts as $product)
                                     <span>
-                                        {{$product->products->name}}
+                                        商品SkuID:{{$product->products->skuid}}
                                         (数量:{{$product->unit}},单价:${{number_format($product->products->price,2)}},
                                         总价:${{number_format($product->unit*$product->products->price,2)}})</span>;<br/>
                                 @endforeach
-                                合计 ${{number_format($order->total_amount + $order->discount_amount,2)}},<br/>
-                                优惠折扣 ${{number_format($order->discount_amount,2)}},<br/>
-                                总付款金额 ${{number_format($order->total_amount,2)}},<br/>
+                                合计 ${{number_format($order->total_amount,2)}},<br/>
+                                折扣 ${{number_format($order->discount_amount,2)}},<br/>
                                 物品通过 {{$order->express??'未知'}}(单号:{{$order->express_no??'未知'}})发货，<br/>
                                 销售网址 <b>besttrinkets.com</b>
                             </p>
@@ -85,6 +85,7 @@
                 </div>
             </div>
         @endforeach
+        @endif
     </div>
 </div>
 

@@ -25,15 +25,26 @@ class OrderController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new OrderInfo());
+        
+        $grid->filter(function($filter){
 
-        $grid->column('id', __('Id'));
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+
+            // 在这里添加字段过滤器
+            $filter->like( 'name','客户名字');
+            $filter->like( 'receiver_email','收款人邮箱');
+            $filter->like( 'porder_no','PayPal 订单号');
+            $filter->date( 'created_at', '创建时间');
+        });
+        $grid->expandFilter();
+        
         $grid->column('order_number', '系统单号')->filter('like');
         $grid->column('porder_no', 'PayPal 订单号')->filter('like');
         $grid->column('email', '客户邮箱')->filter('like');
-        $grid->column('receiver_email', '收款人邮箱')->filter('like')->searchable();
+        $grid->column('receiver_email', '收款人邮箱')->filter('like');
         $grid->column('name', '客户名字');
-        $grid->column('total_amount', '交易金额');
-        $grid->column('discount_amount', '显示折扣');
+        $grid->column('total_amount', '金额(USD)');
         $grid->column('status', '状态')->display(function ($status) {
             if ($status == 0) {
                 return '未完成';
@@ -46,8 +57,9 @@ class OrderController extends AdminController
         ]);
         $grid->column('express', '快递公司');
         $grid->column('express_no', '快递单号');
-        $grid->column('created_at', '创建时间');
-        $grid->column('updated_at', '更新时间');
+        $grid->column('created_at', '创建时间')->display(function ($created_at){
+            return date('Y-m-d H:i:s',strtotime($created_at));
+        });
 
         return $grid;
     }
@@ -87,7 +99,15 @@ class OrderController extends AdminController
     protected function form()
     {
         $form = new Form(new OrderInfo());
-
+        
+        $options = [
+            "USPS" => "USPS",
+            "顺丰速运" => "顺丰速运",
+            "Four PX Express" => "4PX Express",
+            "Fedex" => "联邦快递",
+            "DHL" => "DHL",
+            "邮政" => "邮政"
+            ];
         $form->text('order_number', '系统单号')->disable();
         $form->text('porder_no', 'Paypal 订单号')->disable();
         $form->email('email', '客户邮箱')->disable();
@@ -96,7 +116,7 @@ class OrderController extends AdminController
         $form->decimal('total_amount', '总金额')->disable();
         $form->decimal('discount_amount', '显示折扣')->disable();
         $form->switch('status','状态');
-        $form->text('express', '快递公司');
+        $form->select('express', '快递公司')->options($options);
         $form->text('express_no', '快递单号');
 
         return $form;

@@ -85,9 +85,9 @@ class Controller extends BaseController
     public function initProduct($amount): array
     {
         /*获取最小单价*/
-        $this->minPrice = Product::query()->orderBy('price')->min('price');
+        $this->minPrice = Product::query()->where('status',1)->orderBy('price')->min('price');
         /*获取小于总金额的所有产品*/
-        $products = Product::query()->where('price', '<=', $amount)->get();
+        $products = Product::query()->where('price', '<=', $amount)->where('status',1)->get();
 
         $pArr = [];
         $i = 0;
