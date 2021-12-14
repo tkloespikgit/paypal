@@ -25,7 +25,7 @@ class OrderController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new OrderInfo());
-        
+
         $grid->filter(function($filter){
 
             // 去掉默认的id过滤器
@@ -38,7 +38,7 @@ class OrderController extends AdminController
             $filter->date( 'created_at', '创建时间');
         });
         $grid->expandFilter();
-        
+
         $grid->column('order_number', '系统单号')->filter('like');
         $grid->column('porder_no', 'PayPal 订单号')->filter('like');
         $grid->column('email', '客户邮箱')->filter('like');
@@ -56,7 +56,7 @@ class OrderController extends AdminController
             1 => '已完成'
         ]);
         $grid->column('express', '快递公司');
-        $grid->column('express_no', '快递单号');
+        $grid->column('express_no', '快递单号')->sortable();
         $grid->column('created_at', '创建时间')->display(function ($created_at){
             return date('Y-m-d H:i:s',strtotime($created_at));
         });
@@ -99,7 +99,7 @@ class OrderController extends AdminController
     protected function form()
     {
         $form = new Form(new OrderInfo());
-        
+
         $options = [
             "USPS" => "USPS",
             "顺丰速运" => "顺丰速运",
