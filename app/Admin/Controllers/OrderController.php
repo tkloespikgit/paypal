@@ -56,7 +56,7 @@ class OrderController extends AdminController
                             $query->whereNull('status', 0);
                             break;
                     }
-                }, '运单号', 'status_paid')->radio([
+                }, '订单状态', 'status_paid')->radio([
                     'all' => '全部',
                     'yes' => '已支付',
                     'no' => '未支付',
