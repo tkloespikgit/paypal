@@ -32,33 +32,39 @@ class OrderController extends AdminController
             $filter->disableIdFilter();
 
             // 在这里添加字段过滤器
-            $filter->like( 'name','客户名字');
-            $filter->like( 'receiver_email','收款人邮箱');
-            $filter->like( 'porder_no','PayPal 订单号');
-            $filter->date( 'created_at', '创建时间');
+            $filter->column(1/2, function ($filter) {
+                $filter->like( 'name','客户名字');
+                $filter->like( 'email','客户邮箱');
+                $filter->like( 'porder_no','PayPal 订单号');
+                $filter->like( 'order_number','系统订单号');
+            });
 
-            $filter->scope('porder_no')->whereNotNull('porder_no');
+            $filter->column(1/2, function ($filter) {
+                $filter->like( 'receiver_email','收款人邮箱');
+                $filter->date( 'created_at', '创建时间');
+                $filter->equal('status')->select([
+                    0 => '未支付',
+                    1 => '已支付'
+                ]);
+            });
         });
         $grid->expandFilter();
 
-        $grid->column('order_number', '系统单号')->filter('like');
-        $grid->column('porder_no', 'PayPal 订单号')->filter('like');
-        $grid->column('email', '客户邮箱')->filter('like');
-        $grid->column('receiver_email', '收款人邮箱')->filter('like');
+        $grid->column('order_number', '系统单号');
+        $grid->column('porder_no', 'PayPal 订单号');
+        $grid->column('email', '客户邮箱');
+        $grid->column('receiver_email', '收款人邮箱');
         $grid->column('name', '客户名字');
         $grid->column('total_amount', '金额(USD)');
         $grid->column('status', '状态')->display(function ($status) {
             if ($status == 0) {
-                return '未完成';
+                return '未支付';
             } else {
-                return '已完成';
+                return '已支付';
             }
-        })->filter([
-            0 => '未完成',
-            1 => '已完成'
-        ]);
+        });
         $grid->column('express', '快递公司');
-        $grid->column('express_no', '快递单号')->sortable();
+        $grid->column('express_no', '快递单号');
         $grid->column('created_at', '创建时间')->display(function ($created_at){
             return date('Y-m-d H:i:s',strtotime($created_at));
         });
