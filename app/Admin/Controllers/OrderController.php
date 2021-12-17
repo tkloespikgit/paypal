@@ -46,6 +46,21 @@ class OrderController extends AdminController
                     0 => '未支付',
                     1 => '已支付'
                 ]);
+                $filter->where(function ($query) {
+                    switch ($this->input) {
+                        case 'yes':
+                            // custom complex query if the 'yes' option is selected
+                            $query->whereNotNull('express_no');
+                            break;
+                        case 'no':
+                            $query->whereNull('express_no');
+                            break;
+                    }
+                }, '运单号', 'name_for_url_shortcut')->radio([
+                    'all' => '群全部',
+                    'yes' => '已填写',
+                    'no' => '未填写',
+                ]);
             });
         });
         $grid->expandFilter();
