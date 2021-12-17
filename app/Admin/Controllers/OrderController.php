@@ -18,6 +18,11 @@ class OrderController extends AdminController
     protected $title = 'OrderInfo';
 
     /**
+     * @var
+     */
+    public $input;
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -26,38 +31,47 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new OrderInfo());
 
-        $grid->filter(function($filter){
+        $grid->filter(function ($filter) {
 
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
 
             // 在这里添加字段过滤器
-            $filter->column(1/2, function ($filter) {
-                $filter->like( 'name','客户名字');
-                $filter->like( 'email','客户邮箱');
-                $filter->like( 'porder_no','PayPal 订单号');
-                $filter->like( 'order_number','系统订单号');
+            $filter->column(1 / 2, function ($filter) {
+                $filter->like('name', '客户名字');
+                $filter->like('email', '客户邮箱');
+                $filter->like('porder_no', 'PayPal 订单号');
+                $filter->like('order_number', '系统订单号');
             });
 
-            $filter->column(1/2, function ($filter) {
-                $filter->like( 'receiver_email','收款人邮箱');
-                $filter->date( 'created_at', '创建时间');
-                $filter->equal('status','状态')->select([
-                    0 => '未支付',
-                    1 => '已支付'
+            $filter->column(1 / 2, function ($filter) {
+                $filter->like('receiver_email', '收款人邮箱');
+                $filter->date('created_at', '订单日期');
+                $filter->where(function ($query) {
+                    switch ($this->input) {
+                        case 'yes':
+                            $query->where('status', 1);
+                            break;
+                        case 'no':
+                            $query->whereNull('status', 0);
+                            break;
+                    }
+                }, '运单号', 'status_paid')->radio([
+                    'all' => '全部',
+                    'yes' => '已支付',
+                    'no' => '未支付',
                 ]);
                 $filter->where(function ($query) {
                     switch ($this->input) {
                         case 'yes':
-                            // custom complex query if the 'yes' option is selected
                             $query->whereNotNull('express_no');
                             break;
                         case 'no':
                             $query->whereNull('express_no');
                             break;
                     }
-                }, '运单号', 'name_for_url_shortcut')->radio([
-                    'all' => '群全部',
+                }, '运单号', 'express_no_entered')->radio([
+                    'all' => '全部',
                     'yes' => '已填写',
                     'no' => '未填写',
                 ]);
@@ -78,10 +92,17 @@ class OrderController extends AdminController
                 return '已支付';
             }
         });
-        $grid->column('express', '快递公司');
-        $grid->column('express_no', '快递单号');
-        $grid->column('created_at', '创建时间')->display(function ($created_at){
-            return date('Y-m-d H:i:s',strtotime($created_at));
+        $grid->column('express', '快递公司')->editable('select', [
+            "USPS" => "USPS",
+            "顺丰速运" => "顺丰速运",
+            "Four PX Express" => "4PX Express",
+            "Fedex" => "联邦快递",
+            "DHL" => "DHL",
+            "邮政" => "邮政"
+        ]);
+        $grid->column('express_no', '快递单号')->editable();
+        $grid->column('created_at', '创建时间')->display(function ($created_at) {
+            return date('Y-m-d H:i:s', strtotime($created_at));
         });
 
         return $grid;
@@ -130,7 +151,7 @@ class OrderController extends AdminController
             "Fedex" => "联邦快递",
             "DHL" => "DHL",
             "邮政" => "邮政"
-            ];
+        ];
         $form->text('order_number', '系统单号')->disable();
         $form->text('porder_no', 'Paypal 订单号')->disable();
         $form->email('email', '客户邮箱')->disable();
@@ -138,7 +159,7 @@ class OrderController extends AdminController
         $form->text('name', '客户名字')->disable();
         $form->decimal('total_amount', '总金额')->disable();
         $form->decimal('discount_amount', '显示折扣')->disable();
-        $form->switch('status','状态');
+        $form->switch('status', '状态');
         $form->select('express', '快递公司')->options($options);
         $form->text('express_no', '快递单号');
 
