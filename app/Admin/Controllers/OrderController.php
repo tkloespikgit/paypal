@@ -42,7 +42,7 @@ class OrderController extends AdminController
             $filter->column(1/2, function ($filter) {
                 $filter->like( 'receiver_email','收款人邮箱');
                 $filter->date( 'created_at', '创建时间');
-                $filter->equal('status')->select([
+                $filter->equal('status','状态')->select([
                     0 => '未支付',
                     1 => '已支付'
                 ]);
