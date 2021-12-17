@@ -36,6 +36,8 @@ class OrderController extends AdminController
             $filter->like( 'receiver_email','收款人邮箱');
             $filter->like( 'porder_no','PayPal 订单号');
             $filter->date( 'created_at', '创建时间');
+
+            $filter->scope('porder_no')->whereNotNull('porder_no');
         });
         $grid->expandFilter();
 

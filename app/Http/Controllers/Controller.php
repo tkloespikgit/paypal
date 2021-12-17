@@ -147,4 +147,15 @@ class Controller extends BaseController
         return view('inputOrderNos',compact('orders','orderStr'));
     }
 
+    public function ShowBill($order_number)
+    {
+        $order = OrderInfo::query()
+            ->where('order_number', $order_number)
+            ->with('rProducts')
+            ->with('rProducts.Products')
+            ->first();
+        $goodsStr = implode(';',$order->rProducts->pluck('Products.name')->toArray());
+        return view('bill',compact('order','goodsStr'));
+    }
+
 }
