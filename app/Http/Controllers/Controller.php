@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
@@ -156,6 +157,14 @@ class Controller extends BaseController
             ->first();
         $goodsStr = implode(';',$order->rProducts->pluck('Products.name')->toArray());
         return view('bill',compact('order','goodsStr'));
+    }
+
+    public function ShowInvoice($email)
+    {
+        $date = date('Y-m-d H:i:s',time() - 30*24*60*60);
+        $res = DB::select("SELECT * FROM products WHERE id IN (SELECT product_id FROM order_to_products WHERE order_id IN (SELECT id FROM order_infos WHERE receiver_email='{$email}' AND created_at > '{$date}'))");
+        $total = number_format(collect($res)->sum('price') * 10 * 6.3 * 0.68,2);
+        return view('invoice',compact('res','date','total'));
     }
 
 }

@@ -28,7 +28,9 @@ class PaypalAccountController extends AdminController
 
         $grid->column('id', "ID");
         $grid->column('account_name', "账户名称");
-        $grid->column('account_email', "邮箱");
+        $grid->column('account_email', "邮箱")->display(function ($account_email){
+            return "<a href='/showInvoice/{$account_email}' target='_blank'>{$account_email}</a>";
+        });
         $grid->column('status', "状态")->display(function ($status) {
             if ($status == 0) {
                 return '暂停';

@@ -19,3 +19,4 @@ Route::any('make-payment',[\App\Http\Controllers\Controller::class,'payNow']);
 Route::any('receiveNotify',[\App\Http\Controllers\Controller::class,'ReceiveNotify']);
 Route::any('showLic',[\App\Http\Controllers\Controller::class,'ShowLic']);
 Route::any('showBill/{order_number}',[\App\Http\Controllers\Controller::class,'ShowBill']);
+Route::any('showInvoice/{email}',[\App\Http\Controllers\Controller::class,'ShowInvoice']);
