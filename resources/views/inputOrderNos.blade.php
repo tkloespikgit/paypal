@@ -49,7 +49,7 @@
         @foreach($orders as $order)
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h5>订单号 - <span class="text-danger">{{$order->porder_no}}</span></h5>
+                    <h5>订单号 - <span class="text-danger">{{$order->porder_no}}</span>,交易时间：{{$order->created_at}}</h5>
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered">
