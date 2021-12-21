@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use function GuzzleHttp\Promise\all;
 
 class OrderController extends AdminController
 {
@@ -42,6 +43,17 @@ class OrderController extends AdminController
                 $filter->like('email', '客户邮箱');
                 $filter->like('porder_no', 'PayPal 订单号');
                 $filter->like('order_number', '系统订单号');
+
+                $filter->where(function ($query) {
+                    if ($this->input != 'all')
+                    {
+                        $query->where('pm',$this->input);
+                    }
+                }, '付款方式', 'express_no_entered')->radio([
+                    'all' => '全部',
+                    'paypal' => 'Paypal',
+                    'creditCard' => '信用卡',
+                ]);
             });
 
             $filter->column(1 / 2, function ($filter) {
@@ -80,10 +92,10 @@ class OrderController extends AdminController
         $grid->expandFilter();
 
         $grid->column('order_number', '系统单号');
-        $grid->column('porder_no', 'PayPal 订单号');
+        $grid->column('porder_no', '收款方单号');
+        $grid->column('pm', '付款方式');
         $grid->column('email', '客户邮箱');
         $grid->column('receiver_email', '收款人邮箱');
-        $grid->column('name', '客户名字');
         $grid->column('total_amount', '金额(USD)');
         $grid->column('status', '状态')->display(function ($status) {
             if ($status == 0) {

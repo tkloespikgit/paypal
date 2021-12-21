@@ -67,7 +67,8 @@ class Controller extends BaseController
                 'email' => $request->input('cemail'),
                 'name' => $request->input('cname'),
                 'total_amount' => $request->input('camount'),
-                'discount_amount' => $data['discount']
+                'discount_amount' => $data['discount'],
+                'pm' => 'paypal'
             ]);
             foreach ($data['pArr'] as $key => $val) {
                 OrderToProduct::query()->create([
@@ -94,7 +95,8 @@ class Controller extends BaseController
                 'email' => $request->input('cemail'),
                 'name' => $request->input('cname'),
                 'total_amount' => $request->input('camount'),
-                'discount_amount' => $data['discount']
+                'discount_amount' => $data['discount'],
+                'pm' => 'creditCard'
             ]);
             foreach ($data['pArr'] as $key => $val) {
                 OrderToProduct::query()->create([
