@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="row">
-    <div class="col-lg-6 col-lg-offset-3 col-sm-12">
+    <div class="col-lg-6 col-lg-offset-3 col-sm-12" style="margin-top: 60px">
         <h3 class="text-center">商品进货收据</h3>
         <h4 class="text-right text-danger">NO.{{rand(1000000,9999999)}}&nbsp;&nbsp;</h4>
         <p class="text-right text-bold">日期：{{date('Y-m-d',time() - 30*24*60*60)}}</p>
