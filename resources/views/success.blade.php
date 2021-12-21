@@ -22,21 +22,23 @@
             <div class="panel-heading">
                 <h4>Payment Result:</h4>
             </div>
-            <table class="table table-hover">
-                <tr>
-                    <td>Order Number:</td>
-                    <td>{{$order->order_number}}({{$order->porder_no}})</td>
-                </tr>
-                <tr>
-                    <td>Pay Amount:</td>
-                    <td>{{number_format($order->total_amount,2)}}</td>
-                </tr>
-                <tr>
-                    <td>Result:</td>
-                    <td>{{$order->status == 1 ? "SUCCESS" : "FAILED"}}</td>
-                </tr>
-            </table>
-            <a class="btn btn-success" href="{{url('creditCard')}}">Pay Again</a>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <tr>
+                        <td>Order Number:</td>
+                        <td>{{$order->order_number}}({{$order->porder_no}})</td>
+                    </tr>
+                    <tr>
+                        <td>Pay Amount:</td>
+                        <td>{{number_format($order->total_amount,2)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Result:</td>
+                        <td>{{$order->status == 1 ? "SUCCESS" : "FAILED"}}</td>
+                    </tr>
+                </table>
+                <a class="btn btn-success" href="{{url('creditCard')}}">Pay Again</a>
+            </div>
         </div>
 
     </div>
