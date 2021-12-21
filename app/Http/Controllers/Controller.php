@@ -222,6 +222,7 @@ class Controller extends BaseController
 
     public function success(Request  $request)
     {
+        sleep(6);
         $order = OrderInfo::query()
             ->where('order_number',$request->input('original_order_no'))
             ->first();
