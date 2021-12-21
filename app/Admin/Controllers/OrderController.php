@@ -49,7 +49,7 @@ class OrderController extends AdminController
                     {
                         $query->where('pm',$this->input);
                     }
-                }, '付款方式', 'express_no_entered')->radio([
+                }, '付款方式', 'pm_type')->radio([
                     'all' => '全部',
                     'paypal' => 'Paypal',
                     'creditCard' => '信用卡',
