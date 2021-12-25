@@ -104,15 +104,8 @@ class OrderController extends AdminController
                 return '已支付';
             }
         });
-        $grid->column('express', '快递公司')->editable('select', [
-            "USPS" => "USPS",
-            "顺丰速运" => "顺丰速运",
-            "Four PX Express" => "4PX Express",
-            "Fedex" => "联邦快递",
-            "DHL" => "DHL",
-            "邮政" => "邮政"
-        ]);
-        $grid->column('express_no', '快递单号')->editable();
+        $grid->column('express', '快递公司');
+        $grid->column('express_no', '快递单号');
         $grid->column('created_at', '创建时间')->display(function ($created_at) {
             return date('Y-m-d H:i:s', strtotime($created_at));
         });
@@ -173,7 +166,8 @@ class OrderController extends AdminController
         $form->decimal('discount_amount', '显示折扣')->disable();
         $form->switch('status', '状态');
         $form->select('express', '快递公司')->options($options);
-        $form->text('express_no', '快递单号');
+        $form->text('express_no', '快递单号')
+            ->updateRules(['required', "unique:order_infos,express_no,{{id}}"]);
 
         return $form;
     }

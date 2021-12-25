@@ -71,13 +71,12 @@
                                 <br/>
                                 @foreach($order->rProducts as $product)
                                     <span>
-                                        商品:{{$product->products->name}}
+                                        商品:{{$product->products->skuid}}({{mb_substr($product->products->name,10)}}...)
                                         (数量:{{$product->unit}},单价:${{number_format($product->products->price,2)}},
                                         总价:${{number_format($product->unit*$product->products->price,2)}})</span>;<br/>
                                 @endforeach
                                 合计 ${{number_format($order->total_amount,2)}},<br/>
                                 折扣 ${{number_format($order->discount_amount,2)}},<br/>
-                                物品通过 {{$order->express??'未知'}}(单号:{{$order->express_no??'未知'}})发货，<br/>
                                 销售网址 <b>besttrinkets.com</b>
                             </p>
                         </div>
