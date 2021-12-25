@@ -71,7 +71,7 @@
                                 <br/>
                                 @foreach($order->rProducts as $product)
                                     <span>
-                                        商品:{{$product->products->skuid}}({{mb_substr($product->products->name,10)}}...)
+                                        商品编号:{{$product->products->skuid}}
                                         (数量:{{$product->unit}},单价:${{number_format($product->products->price,2)}},
                                         总价:${{number_format($product->unit*$product->products->price,2)}})</span>;<br/>
                                 @endforeach
