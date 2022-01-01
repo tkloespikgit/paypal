@@ -291,15 +291,31 @@ class Controller extends BaseController
         return $res;
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     public function cNotify(Request  $request)
     {
-        OrderInfo::query()
-            ->where('order_number',$request->input('original_order_no'))
-            ->update([
-                'status' => 1,
-                'porder_no' => $request->input('order_no')
-            ]);
+        if ($request->input('status') == 1)
+        {
+            OrderInfo::query()
+                ->where('order_number',$request->input('original_order_no'))
+                ->update([
+                    'status' => 1,
+                    'porder_no' => $request->input('order_no')
+                ]);
+        }
+        else
+        {
+            OrderInfo::query()
+                ->where('order_number',$request->input('original_order_no'))
+                ->update([
+                    'porder_no' => $request->input('order_no')
+                ]);
+        }
         return 'SUCCESS';
+
     }
 
     public function success(Request  $request)
