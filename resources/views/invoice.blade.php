@@ -38,7 +38,7 @@
             @foreach($res as $k=>$v)
                 <tr>
                     <td>{{$k+1}}</td>
-                    <td style="word-break: break-all">{{$v->name_cn}}</td>
+                    <td style="word-break: break-all">{{$v->name_cn??$v->name}}</td>
                     <td>件</td>
                     <td class="text-right">{{number_format($v->price*6.3*0.68,2)}}</td>
                     <td class="text-right">10</td>
