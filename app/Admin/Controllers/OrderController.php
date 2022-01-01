@@ -45,9 +45,8 @@ class OrderController extends AdminController
                 $filter->like('order_number', '系统订单号');
 
                 $filter->where(function ($query) {
-                    if ($this->input != 'all')
-                    {
-                        $query->where('pm',$this->input);
+                    if ($this->input != 'all') {
+                        $query->where('pm', $this->input);
                     }
                 }, '付款方式', 'pm_type')->radio([
                     'all' => '全部',
@@ -67,11 +66,15 @@ class OrderController extends AdminController
                         case 'no':
                             $query->whereNull('status', 0);
                             break;
+                        case 'failed':
+                            $query->whereNull('status', 2);
+                            break;
                     }
                 }, '订单状态', 'status_paid')->radio([
                     'all' => '全部',
                     'yes' => '已支付',
                     'no' => '未支付',
+                    'failed' => '支付失败',
                 ]);
                 $filter->where(function ($query) {
                     switch ($this->input) {
@@ -100,6 +103,8 @@ class OrderController extends AdminController
         $grid->column('status', '状态')->display(function ($status) {
             if ($status == 0) {
                 return '未支付';
+            } elseif ($status == 2) {
+                return '付款失败';
             } else {
                 return '已支付';
             }

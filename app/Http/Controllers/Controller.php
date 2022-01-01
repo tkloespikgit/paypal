@@ -311,6 +311,7 @@ class Controller extends BaseController
             OrderInfo::query()
                 ->where('order_number',$request->input('original_order_no'))
                 ->update([
+                    'status' => 2,
                     'porder_no' => $request->input('order_no')
                 ]);
         }
