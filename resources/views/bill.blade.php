@@ -40,7 +40,7 @@
             @foreach($order->rProducts as $k => $product)
                 <tr>
                     <td >{{$k+1}}</td>
-                    <td >{{$product->products->name}}</td>
+                    <td >{{$product->products->name_cn}}</td>
                     <td class="text-right">{{number_format($product->products->price,2)}}</td>
                     <td class="text-right">{{$product->unit}}</td>
                     <td class="text-right">{{number_format($product->unit*$product->products->price,2)}}</td>

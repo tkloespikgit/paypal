@@ -28,6 +28,7 @@ class ProductController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
+        $grid->column('name_cn', __('Name(CN)'))->editable();
         $grid->column('price', __('Price'));
         $grid->column('skuid', __('Skuid'));
         $grid->column('status', __('Status'));
@@ -49,6 +50,7 @@ class ProductController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
+        $show->field('name_cn', __('Name(CN)'));
         $show->field('price', __('Price'));
         $show->field('skuid', __('Skuid'));
         $show->field('status', __('Status'));
@@ -68,6 +70,7 @@ class ProductController extends AdminController
         $form = new Form(new Product());
 
         $form->text('name', __('Name'));
+        $form->text('name_cn', __('Name(CN)'));
         $form->decimal('price', __('Price'));
         $form->text('skuid', __('Skuid'));
         $form->switch('status', __('Status'))->default(1);
