@@ -210,7 +210,7 @@ class Controller extends BaseController
 
         $total_num = collect($res)->sum('price') * 10 * 6.3 * 0.68;
         $total_dec = number_format($total_num,2);
-        $total_cn = $this->rmb_format($total_num,'元',false,false);
+        $total_cn = $this->rmb_format($total_num,'元',false,true);
 
         return view('invoice',compact('res','date','total_dec','total_cn'));
     }
