@@ -208,7 +208,7 @@ class Controller extends BaseController
         $date = date('Y-m-d H:i:s',time() - 30*24*60*60);
         $res = DB::select("SELECT * FROM products WHERE id IN (SELECT product_id FROM order_to_products WHERE order_id IN (SELECT id FROM order_infos WHERE receiver_email='{$email}' AND created_at > '{$date}'))");
 
-        $total_num = collect($res)->sum('price') * 10 * 6.3 * 0.68;
+        $total_num = round(collect($res)->sum('price') * 10 * 6.3 * 0.68,0);
         $total_dec = number_format($total_num,2);
         $total_cn = $this->rmb_format($total_num,'元',false,true);
 
