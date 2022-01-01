@@ -30,6 +30,7 @@
             <tr>
                 <th style="width: 45px">序号</th>
                 <th>品名</th>
+                <th style="width: 100px">货号</th>
                 <th style="width: 45px">单位</th>
                 <th class="text-right" style="width: 80px">单价(￥)</th>
                 <th class="text-right" style="width: 45px">数量</th>
@@ -39,6 +40,7 @@
                 <tr>
                     <td>{{$k+1}}</td>
                     <td style="word-break: break-all">{{$v->name_cn??$v->name}}</td>
+                    <td style="word-break: break-all">{{$v->skuid}}</td>
                     <td>件</td>
                     <td class="text-right">{{number_format($v->price*6.3*0.68,2)}}</td>
                     <td class="text-right">10</td>
