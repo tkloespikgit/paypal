@@ -27,7 +27,7 @@ class ProductController extends AdminController
         $grid = new Grid(new Product());
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
+        $grid->column('name', __('Name'))->editable();
         $grid->column('name_cn', __('Name(CN)'))->editable();
         $grid->column('price', __('Price'));
         $grid->column('skuid', __('Skuid'));
