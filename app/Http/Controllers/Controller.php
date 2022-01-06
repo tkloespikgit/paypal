@@ -106,11 +106,16 @@ class Controller extends BaseController
                 ]);
             }
 
-            $order2 = OrderInfo::query()
+            $orderInfo = OrderInfo::query()
                 ->where('order_number', $order->order_number)
                 ->with('rProducts')
                 ->with('rProducts.Products')
-                ->first()->toJson();
+                ->first()->toArray();
+
+            $discount = $order->discount_amount;
+
+
+
 
             $res = Http::asForm()->post('https://www.cbecspay.com/Gateway/V1/CreateRequest', [
                 "merchant_no" => '20211217095445160',
@@ -119,7 +124,7 @@ class Controller extends BaseController
                 "amount" => $order->total_amount * 100,
                 "currency" => 'USD',
                 "goods_name" => 'BestTrinkets Cart Checkout',
-                "product_info" => $order2,
+                "product_info" => json_encode(compact('orderInfo','discount')),
                 "original_order_no" => $order->order_number,
                 "ip" => $request->getClientIp(),
                 "website_url" => 'https://www.besttrinkets.com',
