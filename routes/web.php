@@ -13,13 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::any('/',[\App\Http\Controllers\Controller::class,'showAccountsV2']);
-Route::any('showAccountsV2',[\App\Http\Controllers\Controller::class,'showAccountsV2']);
-Route::any('creditCard',[\App\Http\Controllers\Controller::class,'CreditCardPay']);
-Route::any('make-payment',[\App\Http\Controllers\Controller::class,'payNow']);
-Route::any('receiveNotify',[\App\Http\Controllers\Controller::class,'ReceiveNotify']);
+###### paypal
+Route::get('/',[\App\Http\Controllers\Payment\PaypalController::class,'renderHtml']);
+Route::post('/',[\App\Http\Controllers\Payment\PaypalController::class,'pay']);
+Route::any('receiveNotify',[\App\Http\Controllers\Payment\PaypalController::class,'receiveNotify']);
+
+###### visa/mastercard
+Route::get('creditCard',[\App\Http\Controllers\Payment\StripeController::class,'renderHtml']);
+Route::post('creditCard',[\App\Http\Controllers\Payment\StripeController::class,'pay']);
+Route::any('creditCard/receiveNotify',[\App\Http\Controllers\Payment\StripeController::class,'receiveNotify']);
+
+
 Route::any('showLic',[\App\Http\Controllers\Controller::class,'ShowLic']);
 Route::any('showBill/{order_number}',[\App\Http\Controllers\Controller::class,'ShowBill']);
 Route::any('showInvoice/{email}',[\App\Http\Controllers\Controller::class,'ShowInvoice']);
 Route::any('success',[\App\Http\Controllers\Controller::class,'success']);
-Route::any('c-notify',[\App\Http\Controllers\Controller::class,'cNotify']);
