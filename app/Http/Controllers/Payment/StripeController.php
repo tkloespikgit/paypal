@@ -51,7 +51,7 @@ class StripeController extends Controller
             "original_order_no" => $order->order_number,
             "ip"                => $request->getClientIp(),
             "website_url"       => 'https://www.besttrinkets.com',
-            "return_url"        => 'https://pnotify.besttrinkets.com/success',
+            "return_url"        => 'https://pnotify.besttrinkets.com/creditCard/success',
             "notify_url"        => 'https://pnotify.besttrinkets.com/creditCard/receiveNotify',
             "accept_language"   => 'zh',
             "timestamp"         => time(),
@@ -82,5 +82,18 @@ class StripeController extends Controller
                 ]);
         }
         return 'SUCCESS';
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function success(Request $request)
+    {
+        sleep(6);
+        $order = OrderInfo::query()
+            ->where('order_number', $request->input('original_order_no'))
+            ->first();
+        return view('result', compact('order'));
     }
 }

@@ -22,7 +22,7 @@ Route::any('receiveNotify',[\App\Http\Controllers\Payment\PaypalController::clas
 Route::get('creditCard',[\App\Http\Controllers\Payment\StripeController::class,'renderHtml']);
 Route::post('creditCard',[\App\Http\Controllers\Payment\StripeController::class,'pay']);
 Route::any('creditCard/receiveNotify',[\App\Http\Controllers\Payment\StripeController::class,'receiveNotify']);
-
+Route::any('creditCard/success',[\App\Http\Controllers\Payment\StripeController::class,'success']);
 
 Route::any('showLic',[\App\Http\Controllers\Controller::class,'ShowLic']);
 Route::any('showBill/{order_number}',[\App\Http\Controllers\Controller::class,'ShowBill']);
