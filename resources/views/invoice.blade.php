@@ -49,7 +49,7 @@
             @endforeach
             <tr>
                 <td>总计</td>
-                <td colspan="5" class="text-right">{{$total_dec}} (元)</td>
+                <td colspan="6" class="text-right">{{$total_dec}} (元)</td>
             </tr>
         </table>
         <hr>

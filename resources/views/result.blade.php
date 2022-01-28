@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('payType','Paypal')
+@section('payType','Visa/Mastercard')
 @section('content')
     <div class="section">
         <div class="container">
