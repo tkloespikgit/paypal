@@ -16,6 +16,8 @@
                                     merchant called CHPS LIMITED!
                                     If not, please <span
                                         class="text-danger">don`t</span> send the money!</b>
+                                <br>
+                                <b>Some customers respond that their transaction has been charged duplicate.So we only allow one customer make payment once daily.If you have any question with your charge or payment,please contact us at <a href="mailto:idpaypal@163.com">idpaypal@163.com</a></b>
                             </div>
                             <hr/>
                             <form class="" action="https://pnotify.besttrinkets.com/creditCard" method="post" target="_blank">
