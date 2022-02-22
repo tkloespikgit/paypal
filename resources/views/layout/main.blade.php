@@ -40,9 +40,6 @@
                     <li class="nav-item">
                         <a href="/" class="nav-link">Pay By Paypal</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{url('creditCard')}}" class="nav-link">Pay By Visa/Mastercard</a>
-                    </li>
                 </ul>
             </div>
         </div>
