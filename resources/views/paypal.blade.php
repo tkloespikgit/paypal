@@ -27,7 +27,7 @@
                                         @foreach($accounts as $account)
                                             <tr>
                                                 <td>{{$account->account_name}}</td>
-                                                <td>{{$account->account_email}}</td>
+                                                <td>{{encryptEmail($account->account_email)}}</td>
                                             </tr>
                                         @endforeach
 

@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Order\SyncExpress;
+use App\Events\ExpressNoUploaded;
 use App\Models\OrderInfo;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -32,6 +34,10 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new OrderInfo());
 
+        $grid->actions(function ($actions) {
+            $actions->add(new SyncExpress);
+        });
+
         $grid->filter(function ($filter) {
 
             // 去掉默认的id过滤器
@@ -49,8 +55,8 @@ class OrderController extends AdminController
                         $query->where('pm', $this->input);
                     }
                 }, '付款方式', 'pm_type')->radio([
-                    'all' => '全部',
-                    'paypal' => 'Paypal',
+                    'all'        => '全部',
+                    'paypal'     => 'Paypal',
                     'creditCard' => '信用卡',
                 ]);
             });
@@ -71,9 +77,9 @@ class OrderController extends AdminController
                             break;
                     }
                 }, '订单状态', 'status_paid')->radio([
-                    'all' => '全部',
-                    'yes' => '已支付',
-                    'no' => '未支付',
+                    'all'    => '全部',
+                    'yes'    => '已支付',
+                    'no'     => '未支付',
                     'failed' => '支付失败',
                 ]);
                 $filter->where(function ($query) {
@@ -88,7 +94,7 @@ class OrderController extends AdminController
                 }, '运单号', 'express_no_entered')->radio([
                     'all' => '全部',
                     'yes' => '已填写',
-                    'no' => '未填写',
+                    'no'  => '未填写',
                 ]);
             });
         });
@@ -155,13 +161,13 @@ class OrderController extends AdminController
         $form = new Form(new OrderInfo());
 
         $options = [
-            "USPS" => "USPS",
-            "顺丰速运" => "顺丰速运",
+            "USPS"            => "USPS",
+            "顺丰速运"            => "顺丰速运",
             "Four PX Express" => "4PX Express",
-            "Fedex" => "联邦快递",
-            "DHL" => "DHL",
-            "邮政" => "邮政",
-            "YunExpress" => "YunExpress",
+            "Fedex"           => "联邦快递",
+            "DHL"             => "DHL",
+            "邮政"              => "邮政",
+            "YunExpress"      => "YunExpress",
         ];
         $form->text('order_number', '系统单号')->disable();
         $form->text('porder_no', 'Paypal 订单号')->disable();
@@ -175,6 +181,9 @@ class OrderController extends AdminController
         $form->text('express_no', '快递单号')
             ->updateRules(['required', "unique:order_infos,express_no,{{id}}"]);
 
+        $form->saved(function (Form $form) {
+            ExpressNoUploaded::dispatch(OrderInfo::query()->find($form->model()->id));
+        });
         return $form;
     }
 }
