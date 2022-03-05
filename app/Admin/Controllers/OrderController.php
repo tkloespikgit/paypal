@@ -70,7 +70,7 @@ class OrderController extends AdminController
                             $query->where('status', 1);
                             break;
                         case 'no':
-                            $query->whereNull('status', 0);
+                            $query->where('status', 0);
                             break;
                         case 'failed':
                             $query->whereNull('status', 2);
@@ -96,6 +96,20 @@ class OrderController extends AdminController
                     'yes' => '已填写',
                     'no'  => '未填写',
                 ]);
+                $filter->where(function ($query) {
+                    switch ($this->input) {
+                        case 1:
+                            $query->where('express_status', 1);
+                            break;
+                        case 0:
+                            $query->where('express_status', 0);
+                            break;
+                    }
+                }, '运单状态', 'express_status_n')->radio([
+                    -1 => '全部',
+                    1  => '已同步',
+                    0  => '未同步',
+                ]);
             });
         });
         $grid->expandFilter();
@@ -117,6 +131,14 @@ class OrderController extends AdminController
         });
         $grid->column('express', '快递公司');
         $grid->column('express_no', '快递单号');
+        $grid->column('express_status', '运单状态')->display(function ($express_status) {
+            if ($express_status == 0) {
+                return "未同步";
+            } else {
+                return "已同步";
+            }
+
+        });
         $grid->column('created_at', '创建时间')->display(function ($created_at) {
             return date('Y-m-d H:i:s', strtotime($created_at));
         });
