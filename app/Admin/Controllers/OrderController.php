@@ -190,6 +190,7 @@ class OrderController extends AdminController
             "DHL"             => "DHL",
             "邮政"              => "邮政",
             "YunExpress"      => "YunExpress",
+            "TNT"             => "TNT",
         ];
         $form->text('order_number', '系统单号')->disable();
         $form->text('porder_no', 'Paypal 订单号')->disable();
