@@ -114,7 +114,7 @@ GROUP BY
 	op.product_id");
 
         $total_num = round(collect($res)->sum(function ($r) {
-                return $r->price_cny * ($r->nums + 5);
+                return round($r->price_cny) * ($r->nums + 5);
             }) , 0);
         $total_dec = number_format($total_num, 2);
         $total_cn  = $this->rmb_format($total_num, '元', false, true);

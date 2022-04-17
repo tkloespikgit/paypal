@@ -42,9 +42,9 @@
                     <td style="word-break: break-all">{{$v->name_cn??$v->name}}</td>
                     <td style="word-break: break-all">{{$v->skuid}}</td>
                     <td>件</td>
-                    <td class="text-right">{{number_format($v->price_cny,2)}}</td>
+                    <td class="text-right">{{number_format(round($v->price_cny),2)}}</td>
                     <td class="text-right">{{$v->nums+5}}</td>
-                    <td class="text-right">{{number_format($v->price_cny*($v->nums+5),2)}}</td>
+                    <td class="text-right">{{number_format(round($v->price_cny)*($v->nums+5),2)}}</td>
                 </tr>
             @endforeach
             <tr>
