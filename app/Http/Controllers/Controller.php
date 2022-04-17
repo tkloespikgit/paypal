@@ -108,8 +108,8 @@ FROM
 	LEFT JOIN order_infos o ON o.id = op.order_id
 	LEFT JOIN products p ON op.product_id = p.id
 WHERE
-	o.created_at > {$date} AND
-	o.receiver_email={$email}
+	o.created_at > '{$date}' AND
+	o.receiver_email='{$email}'
 GROUP BY
 	op.product_id");
 
