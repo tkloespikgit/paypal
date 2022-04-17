@@ -98,7 +98,7 @@ class Controller extends BaseController
     {
         $date = date('Y-m-d H:i:s', time() - 30 * 24 * 60 * 60);
         $res  = DB::select("SELECT
-	p.id,
+	op.product_id,
 	p.name_cn,
 	SUM( unit ) AS nums ,
 	p.price * 0.68 * 6.4 as price_cny,
