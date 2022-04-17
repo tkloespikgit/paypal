@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Route;
 Admin::routes();
 
 Route::group([
-    'prefix'        => config('admin.route.prefix'),
-    'middleware'    => config('admin.route.middleware'),
-    'as'            => config('admin.route.prefix') . '.',
+    'prefix'     => config('admin.route.prefix'),
+    'middleware' => config('admin.route.middleware'),
+    'as'         => config('admin.route.prefix') . '.',
 ], function (Router $router) {
 
-    $router->get('/', [HomeController::class,'index'])->name('home');
+    $router->get('/', [HomeController::class, 'index'])->name('home');
 
     $router->resource('paypal-accounts', PaypalAccountController::class);
     $router->resource('order-infos', OrderController::class);

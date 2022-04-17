@@ -23,8 +23,8 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-sm-12" style="margin-top: 60px">
         <h3 class="text-center">商品进货收据</h3>
-        <h4 class="text-right text-danger">NO.{{rand(1000000,9999999)}}&nbsp;&nbsp;</h4>
-        <p class="text-right text-bold">日期：{{date('Y-m-d',time() - 30*24*60*60)}}</p>
+        <h4 class="text-right text-danger">NO.{{date('Y')}}-{{rand(1000000,9999999)}}&nbsp;&nbsp;</h4>
+        <p class="text-right text-bold">日期：{{date('Y-m-d',time() - 35*24*60*60)}}</p>
         <hr/>
         <table class="table table-bordered">
             <tr>
@@ -43,8 +43,8 @@
                     <td style="word-break: break-all">{{$v->skuid}}</td>
                     <td>件</td>
                     <td class="text-right">{{number_format($v->price*6.3*0.68,2)}}</td>
-                    <td class="text-right">10</td>
-                    <td class="text-right">{{number_format($v->price*6.3*0.68*10,2)}}</td>
+                    <td class="text-right">{{$v->nums+5}}</td>
+                    <td class="text-right">{{number_format($v->price*6.3*0.68*($v->nums+5),2)}}</td>
                 </tr>
             @endforeach
             <tr>

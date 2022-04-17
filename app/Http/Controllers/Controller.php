@@ -97,9 +97,25 @@ class Controller extends BaseController
     public function ShowInvoice($email)
     {
         $date = date('Y-m-d H:i:s', time() - 30 * 24 * 60 * 60);
-        $res  = DB::select("SELECT * FROM products WHERE id IN (SELECT product_id FROM order_to_products WHERE order_id IN (SELECT id FROM order_infos WHERE receiver_email='{$email}' AND created_at > '{$date}'))");
+        $res  = DB::select("SELECT
+	p.id,
+	p.name_cn,
+	SUM( unit ) AS nums ,
+	p.price * 0.68 * 6.4 as price_cny,
+	p.skuid
+FROM
+	order_to_products op
+	LEFT JOIN order_infos o ON o.id = op.order_id
+	LEFT JOIN products p ON op.product_id = p.id
+WHERE
+	o.created_at > {$date} AND
+	o.receiver_email={$email}
+GROUP BY
+	op.product_id");
 
-        $total_num = round(collect($res)->sum('price') * 10 * 6.3 * 0.68, 0);
+        $total_num = round(collect($res)->sum(function ($r) {
+                return $r->price * ($r->nums + 5);
+            }) * 20 * 6.3 * 0.74, 0);
         $total_dec = number_format($total_num, 2);
         $total_cn  = $this->rmb_format($total_num, '元', false, true);
 
@@ -107,10 +123,10 @@ class Controller extends BaseController
     }
 
     /**
-     * @param int    $money
-     * @param string $int_unit      币种单位，默认"元"，有的需求可能为"圆"
-     * @param bool   $is_round      是否对小数进行四舍五入
-     * @param false  $is_extra_zero 是否对整数部分以 0 结尾，小数存在的数字附加 0,比如 1960.30
+     * @param int $money
+     * @param string $int_unit 币种单位，默认"元"，有的需求可能为"圆"
+     * @param bool $is_round 是否对小数进行四舍五入
+     * @param false $is_extra_zero 是否对整数部分以 0 结尾，小数存在的数字附加 0,比如 1960.30
      * @return array|string|string[]|null
      */
     public function rmb_format(int $money = 0, string $int_unit = '元', bool $is_round = true, bool $is_extra_zero = false)
@@ -241,9 +257,9 @@ class Controller extends BaseController
         if (!empty($order->id)) {
             foreach ($data['pArr'] as $key => $val) {
                 OrderToProduct::query()->create([
-                    'order_id' => $order->id,
+                    'order_id'   => $order->id,
                     'product_id' => $key,
-                    'unit' => count($val)
+                    'unit'       => count($val)
                 ]);
             }
             return $order;
