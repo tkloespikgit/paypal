@@ -115,7 +115,7 @@ GROUP BY
 
         $total_num = round(collect($res)->sum(function ($r) {
                 return $r->price_cny * ($r->nums + 5);
-            }) * 20 * 6.3 * 0.74, 0);
+            }) , 0);
         $total_dec = number_format($total_num, 2);
         $total_cn  = $this->rmb_format($total_num, '元', false, true);
 
