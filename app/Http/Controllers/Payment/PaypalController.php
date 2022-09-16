@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderInfo;
 use App\Models\PaypalAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PaypalController extends Controller
 {
@@ -49,6 +50,7 @@ class PaypalController extends Controller
     public function receiveNotify(Request $request)
     {
         if ($request->input('payment_status') == 'Completed') {
+            Log::info(json_encode($request->all()));
             OrderInfo::query()
                 ->where('order_number', $request->input('invoice'))
                 ->update([
