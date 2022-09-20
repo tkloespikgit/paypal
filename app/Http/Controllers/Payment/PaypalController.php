@@ -91,7 +91,9 @@ class PaypalController extends Controller
 
     private function insertAddress(Request $request, $orderInfo)
     {
-        OrderAddress::query()->create([
+        OrderAddress::query()->firstOrCreate([
+            'order_no' => $orderInfo->order_number,
+        ], [
             'order_id'             => $orderInfo->id,
             'order_no'             => $orderInfo->order_number,
             'pp_order_no'          => $request->input('txn_id'),
