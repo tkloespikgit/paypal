@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderAddress;
 use App\Models\OrderInfo;
 use App\Models\PaypalAccount;
 use Illuminate\Http\Request;
@@ -51,12 +52,14 @@ class PaypalController extends Controller
     {
         if ($request->input('payment_status') == 'Completed') {
             Log::info(json_encode($request->all()));
-            OrderInfo::query()
+            $orderInfo = OrderInfo::query()
                 ->where('order_number', $request->input('invoice'))
-                ->update([
-                    'status'    => 1,
-                    'porder_no' => $request->input('txn_id')
-                ]);
+                ->first();
+            $orderInfo->update([
+                'status'    => 1,
+                'porder_no' => $request->input('txn_id')
+            ]);
+            $this->insertAddress($request, $orderInfo);
         }
         return response('OK');
     }
@@ -84,4 +87,25 @@ class PaypalController extends Controller
             ->orderBy('last_resp')
             ->first();
     }
+
+
+    private function insertAddress(Request $request, $orderInfo)
+    {
+        OrderAddress::query()->create([
+            'order_id'             => $orderInfo->id,
+            'order_no'             => $orderInfo->order_number,
+            'pp_order_no'          => $request->input('txn_id'),
+            'first_name'           => $request->input('first_name'),
+            'last_name'            => $request->input('last_name'),
+            'address_name'         => $request->input('address_name'),
+            'address_country_code' => $request->input('address_country_code'),
+            'address_country'      => $request->input('address_country'),
+            'address_state'        => $request->input('address_state'),
+            'address_city'         => $request->input('address_city'),
+            'address_street'       => $request->input('address_street'),
+            'address_zip'          => $request->input('address_zip'),
+            'payer_email'          => $request->input('payer_email'),
+        ]);
+    }
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\AddressController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PaypalAccountController;
@@ -21,4 +22,5 @@ Route::group([
     $router->resource('paypal-accounts', PaypalAccountController::class);
     $router->resource('order-infos', OrderController::class);
     $router->resource('products', ProductController::class);
+    $router->resource('order-addresses', AddressController::class);
 });
