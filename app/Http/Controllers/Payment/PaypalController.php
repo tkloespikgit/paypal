@@ -160,7 +160,7 @@ class PaypalController extends Controller
             'email'           => $request->input('cemail'),
             'name'            => $request->input('cname'),
             'total_amount'    => $request->input('camount'),
-            'discount_amount' => $amount,
+            'discount_amount' => $amount * -1,
             'pm'              => 'paypal'
         ]);
 
