@@ -32,7 +32,7 @@
     <input type="hidden" name="no_note" value="1">
 </form>
 <script>
-    /*document.getElementById("payForm").submit();*/
+    document.getElementById("payForm").submit();
 </script>
 </body>
 </html>
