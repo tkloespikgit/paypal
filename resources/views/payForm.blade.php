@@ -17,22 +17,22 @@
     {{--币种--}}
     <input type="hidden" name="currency_code" value="USD">
     {{--物品--}}
-    @foreach($orderArr as $key => $goods)
-        <input type="hidden" name="item_name_{{$key+1}}" value="{{$goods->products->name}}">
-        <input type="hidden" name="item_number_{{$key+1}}" value="{{$goods->products->skuid}}">
-        <input type="hidden" name="amount_{{$key+1}}" value="{{$goods->products->price}}">
-        <input type="hidden" name="quantity_{{$key+1}}" value="{{$goods->unit}}">
+    @foreach($orderProducts as $key => $product)
+        <input type="hidden" name="item_name_{{$key+1}}" value="{{$product->product_name}}">
+        <input type="hidden" name="item_number_{{$key+1}}" value="{{$product->sku_id}}">
+        <input type="hidden" name="amount_{{$key+1}}" value="{{$product->price}}">
+        <input type="hidden" name="quantity_{{$key+1}}" value="{{$product->unit}}">
     @endforeach
     {{--运费以及折扣--}}
     <input type="hidden" name="shipping" value="0">
     <input type="hidden" name="discount_amount_cart" value="{{$order->discount_amount}}"/>
-    <input type="hidden" name="notify_url" value="https://pnotify.besttrinkets.com/receiveNotify">
+    <input type="hidden" name="notify_url" value="{{$account->notify_url}}/receiveNotify">
     {{--订单号--}}
     <input type="hidden" name="invoice" value="{{$order->order_number}}">
     <input type="hidden" name="no_note" value="1">
 </form>
 <script>
-    document.getElementById("payForm").submit();
+    /*document.getElementById("payForm").submit();*/
 </script>
 </body>
 </html>

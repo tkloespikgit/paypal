@@ -85,6 +85,8 @@ class PaypalAccountController extends AdminController
 
         $form->text('account_name', __('Account name'));
         $form->text('account_email', __('Account email'));
+        $form->text('connection', __('DB Connection'));
+        $form->text('notify_url', __('NotifyUrl'));
         $form->textarea('account_html', __('Account html'));
         $form->text('status', __('Status'));
         $form->number('last_resp', __('Last resp'));

@@ -5,53 +5,57 @@ namespace App\Http\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use App\Models\OrderAddress;
 use App\Models\OrderInfo;
+use App\Models\OrderProduct;
 use App\Models\PaypalAccount;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PaypalController extends Controller
 {
     /**
-     * 展示付款页面
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function renderHtml()
     {
-        $accounts = $this->getActiveAccounts();
-        $trigger  = 'paypal';
-        return view('paypal', compact('accounts', 'trigger'));
+        $account = $this->getAccount();
+        $trigger = 'paypal';
+        return view('paypal', compact('account', 'trigger'));
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     * @throws \Exception
+     * @return Application|Factory|View
+     * @throws Exception
      */
     public function pay(Request $request)
     {
-        $account = $this->getAccount();
+        $account       = $this->getAccount();
+        $order         = $this->generateOrderByAmount($request, $account);
+        $orderProducts = OrderProduct::query()
+            ->where('order_id', $order->id)
+            ->get();
 
-        $order = $this->createOrderByAmount(
-            $request->input('camount'),
-            $account->account_email,
-            $request->input('cemail'),
-            $request->input('cname'),
-            'paypal');
-
-        $orderArr           = $this->getOrderProds($order->id);
-        $account->last_resp = time();
-        $account->save();
-        return view('payForm', compact('order', 'orderArr', 'account'));
+        return view('payForm', compact('order', 'orderProducts', 'account'));
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      */
     public function receiveNotify(Request $request)
     {
         if ($request->input('payment_status') == 'Completed') {
-            Log::info(json_encode($request->all()));
+
             $orderInfo = OrderInfo::query()
                 ->where('order_number', $request->input('invoice'))
                 ->first();
@@ -59,6 +63,13 @@ class PaypalController extends Controller
                 'status'    => 1,
                 'porder_no' => $request->input('txn_id')
             ]);
+
+            PaypalAccount::query()
+                ->where('account_email', $orderInfo->receiver_email)
+                ->update([
+                    'last_resp' => time()
+                ]);
+
             $this->insertAddress($request, $orderInfo);
         }
         return response('OK');
@@ -66,7 +77,7 @@ class PaypalController extends Controller
 
     /**
      * 获取所有可用账户
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|Collection
      */
     private function getActiveAccounts()
     {
@@ -78,7 +89,7 @@ class PaypalController extends Controller
 
     /**
      * 获取待使用的账户
-     * @return PaypalAccount|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object
+     * @return Builder|Model|object|PaypalAccount
      */
     private function getAccount()
     {
@@ -108,6 +119,64 @@ class PaypalController extends Controller
             'address_zip'          => $request->input('address_zip'),
             'payer_email'          => $request->input('payer_email'),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param PaypalAccount $account
+     * @return Builder|Model|OrderInfo
+     */
+    protected function generateOrderByAmount(Request $request, PaypalAccount $account)
+    {
+        $amount   = $request->input('camount');
+        $products = DB::connection($account->connection)->table('oc_product')
+            ->where('price', '<=', $amount)
+            ->where('status', 1)
+            ->get();
+
+        $productArr = [];
+        while ($amount > 0) {
+            $filteredProduct = $products->where('price', '<=', $amount);
+            $selectedProduct = $filteredProduct->count() > 0 ?
+                $filteredProduct->random() :
+                $products->sortBy('price')->first();
+
+            if (isset($productArr[$selectedProduct->product_id])) {
+                $productArr[$selectedProduct->product_id]['unit'] += 1;
+            } else {
+                $productArr[$selectedProduct->product_id] = [
+                    'name'       => $selectedProduct->model,
+                    'price'      => $selectedProduct->price,
+                    'product_id' => $selectedProduct->product_id,
+                    'unit'       => 1
+                ];
+            }
+            $amount -= $selectedProduct->price;
+        }
+
+        $order = OrderInfo::query()->create([
+            'order_number'    => time() . '-' . rand(10000, 99999),
+            'receiver_email'  => $account->account_email,
+            'email'           => $request->input('cemail'),
+            'name'            => $request->input('cname'),
+            'total_amount'    => $request->input('camount'),
+            'discount_amount' => $amount,
+            'pm'              => 'paypal'
+        ]);
+
+        foreach ($productArr as $product) {
+            OrderProduct::query()->create([
+                'order_id'     => $order->id,
+                'product_name' => $product['name'],
+                'product_id'   => $product['product_id'],
+                'price'        => $product['price'],
+                'unit'         => $product['unit'],
+                'sku_id'       => 'SL1-' . str_pad($product['product_id'], 6, '0', STR_PAD_LEFT),
+                'connection'   => $account->connection
+            ]);
+        }
+
+        return $order;
     }
 
 }

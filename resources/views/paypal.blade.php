@@ -13,7 +13,7 @@
                             </div>
                             <div class="pt-4 text-left">
                                 <b style="color: #000;text-decoration: underline">Make sure when you make payment to our
-                                    paypal account,
+                                    PayPal account,
                                     it will be one of these as bellow! If not, please <span
                                         class="text-danger">don`t</span> send the money!</b>
                             </div>
@@ -24,18 +24,15 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                         </tr>
-                                        @foreach($accounts as $account)
-                                            <tr>
-                                                <td>{{$account->account_name}}</td>
-                                                <td>{{encryptEmail($account->account_email)}}</td>
-                                            </tr>
-                                        @endforeach
-
+                                        <tr>
+                                            <td>{{$account->account_name}}</td>
+                                            <td>{{encryptEmail($account->account_email)}}</td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
                             <hr/>
-                            <form class="" action="https://pnotify.besttrinkets.com/" method="post">
+                            <form class="" action="{{$account->notify_url}}" method="post">
                                 {{csrf_field()}}
                                 <div class="form-group mb-3">
                                     <label for="email_1" class="form-label">Your email<span
