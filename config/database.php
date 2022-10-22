@@ -66,7 +66,7 @@ return [
         'besttrinkets' => [
             'driver'         => 'mysql',
             'url'            => env('DATABASE_URL'),
-            'host'           => "47.242.121.122",
+            'host'           => "172.29.243.133",
             'port'           => env('DB_PORT', '3306'),
             'database'       => "besttrinkets",
             'username'       => 'admin',
@@ -86,7 +86,7 @@ return [
         'chpmall' => [
             'driver'         => 'mysql',
             'url'            => env('DATABASE_URL'),
-            'host'           => "47.242.109.0",
+            'host'           => "127.0.0.1",
             'port'           => env('DB_PORT', '3306'),
             'database'       => 'chpmall',
             'username'       => 'chpmall',
@@ -106,7 +106,7 @@ return [
         'ledishining' => [
             'driver'         => 'mysql',
             'url'            => env('DATABASE_URL'),
-            'host'           => "47.242.121.122",
+            'host'           => "172.29.243.133",
             'port'           => env('DB_PORT', '3306'),
             'database'       => "ledishining",
             'username'       => 'admin',
@@ -126,7 +126,7 @@ return [
         'starhubs' => [
             'driver'         => 'mysql',
             'url'            => env('DATABASE_URL'),
-            'host'           => "47.242.121.122",
+            'host'           => "172.29.243.133",
             'port'           => env('DB_PORT', '3306'),
             'database'       => "starhubs-store",
             'username'       => 'admin',
