@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                             <hr/>
-                            <form class="" action="{{$account->notify_url}}/" method="post">
+                            <form class="" method="post">
                                 {{csrf_field()}}
                                 <div class="form-group mb-3">
                                     <label for="email_1" class="form-label">Your email<span
