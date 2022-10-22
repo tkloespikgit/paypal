@@ -17,5 +17,6 @@ use Illuminate\Support\Facades\Route;
 ###### paypal
 Route::get('/', [PaypalController::class, 'renderHtml']);
 Route::post('/', [PaypalController::class, 'pay']);
+Route::get('/paypal/{order_no}', [PaypalController::class, 'redirectHtml']);
 Route::any('receiveNotify', [PaypalController::class, 'receiveNotify']);
 

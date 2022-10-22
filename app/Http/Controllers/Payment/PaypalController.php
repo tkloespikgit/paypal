@@ -39,13 +39,27 @@ class PaypalController extends Controller
      */
     public function pay(Request $request)
     {
-        $account       = $this->getAccount();
-        $order         = $this->generateOrderByAmount($request, $account);
+        $account = $this->getAccount();
+        $order   = $this->generateOrderByAmount($request, $account);
+
+
+        return redirect('/')->setTargetUrl($account->notify_url . '/paypal/' . $order->order_number);
+    }
+
+    public function redirectHtml($order_no)
+    {
+        $order         = OrderInfo::query()
+            ->where('order_number', $order_no)
+            ->first();
+        $account       = PaypalAccount::query()
+            ->where('account_email', $order->receiver_email)
+            ->first();
         $orderProducts = OrderProduct::query()
             ->where('order_id', $order->id)
             ->get();
 
         return view('payForm', compact('order', 'orderProducts', 'account'));
+
     }
 
     /**
