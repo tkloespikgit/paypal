@@ -130,6 +130,10 @@ class PaypalController extends Controller
     {
         $amount   = $request->input('camount');
         $products = DB::connection($account->connection)->table('oc_product')
+            ->leftJoin('oc_product_description', function ($join) {
+                $join->on('oc_product.product_id', '=', 'oc_product_description.product_id')
+                    ->where('oc_product_description.language_id', '=', 1);
+            })
             ->where('price', '<=', $amount)
             ->where('status', 1)
             ->get();
@@ -145,7 +149,7 @@ class PaypalController extends Controller
                 $productArr[$selectedProduct->product_id]['unit'] += 1;
             } else {
                 $productArr[$selectedProduct->product_id] = [
-                    'name'       => $selectedProduct->model,
+                    'name'       => $selectedProduct->name,
                     'price'      => $selectedProduct->price,
                     'product_id' => $selectedProduct->product_id,
                     'unit'       => 1
