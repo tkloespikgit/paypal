@@ -22,4 +22,4 @@ Route::get('/paypal/{order_no}', [PaypalController::class, 'redirectHtml']);
 Route::any('receiveNotify', [PaypalController::class, 'receiveNotify']);
 
 Route::get('orderDetails/{id}',[OrderController::class,'orderDetail']);
-Route::any('Gateway/ReceiveNotify/Ayden',[OrderController::class,'orderDetail']);
+Route::any('Gateway/ReceiveNotify/Ayden',[OrderController::class,'aydenNotify']);
