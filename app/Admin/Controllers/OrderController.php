@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Order\OrderProductDetails;
 use App\Admin\Actions\Order\SyncExpress;
 use App\Events\ExpressNoUploaded;
 use App\Models\OrderInfo;
@@ -30,13 +31,16 @@ class OrderController extends AdminController
      *
      * @return Grid
      */
-    protected function grid()
+    protected function grid(): Grid
     {
         $grid = new Grid(new OrderInfo());
 
         $grid->actions(function ($actions) {
             $actions->add(new SyncExpress);
+            $actions->add(new OrderProductDetails);
         });
+
+        $grid->model()->orderBy('id', 'desc');
 
         $grid->filter(function ($filter) {
 
@@ -142,6 +146,7 @@ class OrderController extends AdminController
         $grid->column('created_at', '创建时间')->display(function ($created_at) {
             return date('Y-m-d H:i:s', strtotime($created_at));
         });
+
 
         return $grid;
     }
